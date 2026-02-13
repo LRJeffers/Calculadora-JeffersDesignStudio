@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotizador Jeffers Design Studio</title>
+    <link rel="icon" href="logo.jpg">
+    <style>
+        /* ESTÉTICA DARK ROMANCE / HACKER PARA JEFFERS DESIGN STUDIO */
+        :root {
+            --bg-color: #050505;
+            --card-bg: #141414;
+            --accent: #b22222; /* Rojo Sangre */
+            --accent-glow: #ff4d4d;
+            --text: #e0e0e0;
+            --input-bg: #2b2b2b;
+            --success: #00ff88;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text);
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at center, #2a0a0a 0%, #000000 100%);
+        }
+
+        /* ANIMACIÓN DE ENTRADA */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(178, 34, 34, 0.15);
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid #333;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        /* LOGO */
+        .logo-container {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .logo-img {
+            max-width: 180px; /* Tamaño controlado */
+            max-height: 100px;
+            height: auto;
+            /* Sombra roja sutil detrás del logo */
+            filter: drop-shadow(0 0 8px rgba(178, 34, 34, 0.3));
+            border-radius: 4px; /* Por si el JPG tiene esquinas duras */
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--text);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 5px;
+            font-weight: 300;
+            font-size: 1.5rem;
+        }
+
+        h2 span {
+            color: var(--accent);
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(178, 34, 34, 0.6);
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 30px;
+            font-style: italic;
+            letter-spacing: 1px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #bbb;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            background-color: var(--input-bg);
+            border: 1px solid #444;
+            color: white;
+            border-radius: 6px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        select:hover, input:hover {
+            border-color: #666;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(178, 34, 34, 0.3);
+            background-color: #222;
+        }
+
+        .hidden {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .visible {
+            display: block;
+            opacity: 1;
+        }
+
+        .result-box {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #0a0a0a, #111);
+            border-radius: 8px;
+            border-left: 4px solid var(--accent);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+
+        .total {
+            font-size: 2rem;
+            color: white;
+            font-weight: bold;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .bs-total {
+            font-size: 1.1rem;
+            color: var(--accent-glow);
+            font-weight: 500;
+            border-top: 1px solid #333;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 15px;
+            background: linear-gradient(90deg, #8a1c1c, #b22222, #8a1c1c);
+            background-size: 200% auto;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.4s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        button:hover {
+            background-position: right center;
+            box-shadow: 0 0 20px rgba(178, 34, 34, 0.6);
+            transform: scale(1.02);
+        }
+
+        .note {
+            font-size: 0.7rem;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .api-status {
+            font-size: 0.75rem;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #555;
+            display: inline-block;
+        }
+        .dot.active { background-color: var(--success); box-shadow: 0 0 8px var(--success); }
+        .dot.error { background-color: #ffaa00; box-shadow: 0 0 8px #ffaa00; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="logo-container">
+        <img src="logo.jpg" alt="Jeffers Design Logo" class="logo-img">
+    </div>
+
+    <h2>Jeffers <span>Design</span></h2>
+    <div class="subtitle">Diseño de portadas y arte para autores de todos los géneros</div>
+
+    <label>Método de Pago:</label>
+    <select id="metodo-pago" onchange="sonidoClick(); toggleMetodoPago()">
+        <option value="nacional">Nacional (Bolívares / Pago Móvil)</option>
+        <option value="internacional">Internacional (PayPal / Binance / Facebank)</option>
+    </select>
+
+    <div id="bloque-tasa">
+        <label>Tasa Euro (BCV):</label>
+        <div style="position: relative;">
+            <input type="number" id="tasa" placeholder="Cargando..." oninput="calcular()">
+            <div id="api-msg" class="api-status">
+                <span id="status-dot" class="dot"></span> 
+                <span id="status-text">Conectando...</span>
+            </div>
+        </div>
+    </div>
+
+    <label>Servicio:</label>
+    <select id="servicio" onchange="sonidoClick(); mostrarOpciones()">
+        <option value="none">-- Selecciona --</option>
+        <option value="portada">Diseño de Portada</option>
+        <option value="maquetacion">Maquetación Editorial</option>
+    </select>
+
+    <div id="opciones-portada" class="hidden">
+        <label>Tipo de Diseño:</label>
+        <select id="tipo-portada" onchange="sonidoClick(); calcular()">
+            <option value="15">Ebook (Premade) - 15 USD/EUR</option>
+            <option value="30">Cubierta Completa (Print) - 30 USD/EUR</option>
+        </select>
+
+        <label>Extras (Cambios, detalles):</label>
+        <input type="number" id="cambios-extra" value="0" min="0" placeholder="0" oninput="calcular()">
+        <div class="note">Cada cambio adicional: +3 USD/EUR</div>
+    </div>
+
+    <div id="opciones-maquetacion" class="hidden">
+        <label>Formato:</label>
+        <select id="tipo-maquetacion" onchange="sonidoClick(); toggleMedida()">
+            <option value="simple">Novela (Texto Fluido) - 0.50/1k</option>
+            <option value="decorado">Novela (Decorada) - 0.75/1k</option>
+            <option value="agenda">Agenda/Diario (Visual) - 1.00/pág</option>
+        </select>
+
+        <div id="input-palabras">
+            <label>Nº de Palabras (Aprox):</label>
+            <input type="number" id="cantidad-palabras" placeholder="Ej: 50000" oninput="calcular()">
+        </div>
+
+        <div id="input-paginas" class="hidden">
+            <label>Nº de Páginas (Aprox):</label>
+            <input type="number" id="cantidad-paginas" placeholder="Ej: 100" oninput="calcular()">
+        </div>
+    </div>
+
+    <div class="result-box">
+        <div>Total Estimado: <span id="total-ref" class="total">0.00</span> <span style="font-size: 1rem; color:#888;">USD/EUR</span></div>
+        <div id="bloque-bs" class="bs-total">En Bolívares: <span id="total-bs">Bs. 0.00</span></div>
+    </div>
+
+    <button onclick="sonidoExito(); enviarWhatsapp()">Solicitar Cotización ➜</button>
+</div>
+
+<script>
+    // --- 🎵 SONIDOS CARGADOS ---
+    const SOUND_CLICK = "click.mp3";
+    const SOUND_SUCCESS = "exito.mp3";
+
+    function sonidoClick() {
+        if (SOUND_CLICK) new Audio(SOUND_CLICK).play().catch(e => console.log(""));
+    }
+
+    function sonidoExito() {
+        if (SOUND_SUCCESS) new Audio(SOUND_SUCCESS).play().catch(e => console.log(""));
+    }
+
+    // --- PRECIOS ---
+    const PRECIO_CAMBIO_EXTRA = 3;
+    const PRECIO_MAQ_SIMPLE = 0.50; 
+    const PRECIO_MAQ_DECORADA = 0.75; 
+    const PRECIO_MAQ_VISUAL = 1.00; 
+
+    // --- LÓGICA ---
+    window.onload = function() {
+        toggleMetodoPago(); 
+        cargarTasa();       
+    };
+
+    function cargarTasa() {
+        fetch('https://ve.dolarapi.com/v1/euros/oficial')
+            .then(response => response.json())
+            .then(data => {
+                const precio = data.promedio;
+                document.getElementById('tasa').value = precio;
+                document.getElementById('status-dot').className = 'dot active';
+                document.getElementById('status-text').innerText = "Tasa BCV (Euro) Online";
+                document.getElementById('status-text').style.color = "#00ff88";
+                calcular(); 
+            })
+            .catch(error => {
+                console.error('Error al obtener tasa:', error);
+                document.getElementById('status-dot').className = 'dot error';
+                document.getElementById('status-text').innerText = "Ingresa tasa manual.";
+            });
+    }
+
+    function toggleMetodoPago() {
+        const metodo = document.getElementById("metodo-pago").value;
+        const bloqueTasa = document.getElementById("bloque-tasa");
+        const bloqueBs = document.getElementById("bloque-bs");
+
+        if (metodo === "internacional") {
+            bloqueTasa.style.display = "none";
+            bloqueBs.style.display = "none";
+        } else {
+            bloqueTasa.style.display = "block";
+            bloqueBs.style.display = "block";
+        }
+        calcular();
+    }
+
+    function mostrarOpciones() {
+        const servicio = document.getElementById("servicio").value;
+        
+        document.getElementById("opciones-portada").classList.add("hidden");
+        document.getElementById("opciones-portada").classList.remove("visible");
+        
+        document.getElementById("opciones-maquetacion").classList.add("hidden");
+        document.getElementById("opciones-maquetacion").classList.remove("visible");
+
+        if (servicio === "portada") {
+            const el = document.getElementById("opciones-portada");
+            el.classList.remove("hidden");
+            setTimeout(() => el.classList.add("visible"), 10);
+        } else if (servicio === "maquetacion") {
+            const el = document.getElementById("opciones-maquetacion");
+            el.classList.remove("hidden");
+            setTimeout(() => el.classList.add("visible"), 10);
+        }
+        calcular();
+    }
+
+    function toggleMedida() {
+        const tipo = document.getElementById("tipo-maquetacion").value;
+        if (tipo === "agenda") {
+            document.getElementById("input-palabras").classList.add("hidden");
+            document.getElementById("input-paginas").classList.remove("hidden");
+            setTimeout(() => document.getElementById("input-paginas").classList.add("visible"), 10);
+        } else {
+            document.getElementById("input-palabras").classList.remove("hidden");
+            document.getElementById("input-paginas").classList.add("hidden");
+        }
+        calcular();
+    }
+
+    function calcular() {
+        const servicio = document.getElementById("servicio").value;
+        let total = 0;
+
+        if (servicio === "portada") {
+            const base = parseFloat(document.getElementById("tipo-portada").value);
+            const extras = parseInt(document.getElementById("cambios-extra").value) || 0;
+            total = base + (extras * PRECIO_CAMBIO_EXTRA);
+        } 
+        else if (servicio === "maquetacion") {
+            const tipo = document.getElementById("tipo-maquetacion").value;
+            
+            if (tipo === "agenda") {
+                const paginas = parseInt(document.getElementById("cantidad-paginas").value) || 0;
+                total = paginas * PRECIO_MAQ_VISUAL;
+            } else {
+                const palabras = parseInt(document.getElementById("cantidad-palabras").value) || 0;
+                let tasaPalabras = (tipo === "simple") ? PRECIO_MAQ_SIMPLE : PRECIO_MAQ_DECORADA;
+                total = (palabras / 1000) * tasaPalabras;
+            }
+            if (total > 0 && total < 10) total = 10; 
+        }
+
+        document.getElementById("total-ref").innerText = total.toFixed(2);
+
+        const metodo = document.getElementById("metodo-pago").value;
+        if (metodo === "nacional") {
+            const tasa = parseFloat(document.getElementById("tasa").value) || 0;
+            const totalBs = total * tasa;
+            let bsFormateado = new Intl.NumberFormat('es-VE', { style: 'currency', currency: 'VES' }).format(totalBs);
+            document.getElementById("total-bs").innerText = bsFormateado;
+        }
+    }
+
+    function enviarWhatsapp() {
+        const servicio = document.getElementById("servicio").value;
+        const total = document.getElementById("total-ref").innerText;
+        const totalBs = document.getElementById("total-bs").innerText;
+        const tasa = document.getElementById("tasa").value;
+        const metodo = document.getElementById("metodo-pago").value;
+        let mensaje = "";
+
+        // RECUERDA: Verifica tu número aquí
+        const telefono = "584125796738"; 
+
+        if (servicio === "none") {
+            alert("Por favor selecciona un servicio.");
+            return;
+        }
+
+        let tipoServicio = "";
+        if (servicio === "portada") {
+            tipoServicio = document.getElementById("tipo-portada").options[document.getElementById("tipo-portada").selectedIndex].text;
+        } else {
+            tipoServicio = "Maquetación: " + document.getElementById("tipo-maquetacion").options[document.getElementById("tipo-maquetacion").selectedIndex].text;
+        }
+
+        if (metodo === "nacional") {
+             mensaje = `Hola Jeffers Design Studio, deseo cotizar: *${tipoServicio}*. Estimado: *${total} USD/EUR* (${totalBs}). (Tasa: ${tasa})`;
+        } else {
+             mensaje = `Hola Jeffers Design, deseo cotizar: *${tipoServicio}*. Estimado: *${total} USD/EUR*. Método: Internacional.`;
+        }
+        
+        window.open(`https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`, '_blank');
+    }
+</script>
+
+</body>
+</html>
