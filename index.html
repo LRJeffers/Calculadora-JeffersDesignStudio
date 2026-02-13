@@ -257,11 +257,20 @@
     <div id="opciones-portada" class="hidden">
         <label>Tipo de Diseño:</label>
         <select id="tipo-portada" onchange="sonidoClick(); calcular()">
-            <option value="15">Ebook (Premade) - 15 USD/EUR</option>
-            <option value="30">Cubierta Completa (Print) - 30 USD/EUR</option>
+            <option disabled selected>-- SELECCIONA TIPO --</option>
+            
+            <optgroup label="PREMADES (Diseños Listos)">
+                <option value="15">Ebook Premade - 15 USD/EUR</option>
+                <option value="30">Cubierta Completa Premade - 30 USD/EUR</option>
+            </optgroup>
+
+            <optgroup label="PERSONALIZADO (Desde Cero)">
+                <option value="45">Ebook Personalizado - 45 USD/EUR. <b>‼️PRECIO BASE‼️</b></option>
+                <option value="75">Cubierta Completa Personalizada - 75 USD/EUR <b>‼️PRECIO BASE‼️</b></option>
+            </optgroup>
         </select>
 
-        <label>Extras (Cambios, detalles):</label>
+        <label>Extras (Solo para Premades o cambios complejos):</label>
         <input type="number" id="cambios-extra" value="0" min="0" placeholder="0" oninput="calcular()">
         <div class="note">Cada cambio adicional: +3 USD/EUR</div>
     </div>
@@ -319,21 +328,37 @@
     };
 
     function cargarTasa() {
-        fetch('https://ve.dolarapi.com/v1/euros/oficial')
+        // INTENTO 1: PyDolarVenezuela (Suele ser más estable)
+        fetch('https://pydolarve.org/api/v1/dollar?page=bcv')
             .then(response => response.json())
             .then(data => {
-                const precio = data.promedio;
-                document.getElementById('tasa').value = precio;
-                document.getElementById('status-dot').className = 'dot active';
-                document.getElementById('status-text').innerText = "Tasa BCV (Euro) Online";
-                document.getElementById('status-text').style.color = "#00ff88";
-                calcular(); 
+                // Buscamos el precio del EURO en la respuesta
+                const precio = data.monitors.eur.price; 
+                actualizarTasa(precio);
             })
-            .catch(error => {
-                console.error('Error al obtener tasa:', error);
-                document.getElementById('status-dot').className = 'dot error';
-                document.getElementById('status-text').innerText = "Ingresa tasa manual.";
+            .catch(error1 => {
+                console.log('Fallo API 1, intentando API 2...');
+                // INTENTO 2: DolarApi (La que tenías antes)
+                fetch('https://ve.dolarapi.com/v1/euros/oficial')
+                    .then(response => response.json())
+                    .then(data => {
+                        actualizarTasa(data.promedio);
+                    })
+                    .catch(error2 => {
+                        console.error('Todas las APIs fallaron');
+                        document.getElementById('status-dot').className = 'dot error';
+                        document.getElementById('status-text').innerText = "Ingresa tasa manual.";
+                        document.getElementById('tasa').placeholder = "0.00";
+                    });
             });
+    }
+
+    function actualizarTasa(precio) {
+        document.getElementById('tasa').value = precio;
+        document.getElementById('status-dot').className = 'dot active';
+        document.getElementById('status-text').innerText = "Tasa BCV (Euro) Online";
+        document.getElementById('status-text').style.color = "#00ff88";
+        calcular(); 
     }
 
     function toggleMetodoPago() {
