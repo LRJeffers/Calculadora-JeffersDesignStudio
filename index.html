@@ -468,9 +468,9 @@
         }
 
         if (metodo === "nacional") {
-             mensaje = `Hola Jeffers Design Studio, deseo cotizar: *${tipoServicio}*. Estimado: *${total} USD/EUR* (${totalBs}). (Tasa: ${tasa})`;
+             mensaje = `Hola, Jeffers Design Studio, deseo cotizar: *${tipoServicio}*. Estimado: *${total} USD/EUR* (${totalBs}). (Tasa: ${tasa})`;
         } else {
-             mensaje = `Hola Jeffers Design, deseo cotizar: *${tipoServicio}*. Estimado: *${total} USD/EUR*. Método: Internacional.`;
+             mensaje = `Hola, Jeffers Design Studio, deseo cotizar: *${tipoServicio}*. Estimado: *${total} USD/EUR*. Método: Internacional.`;
         }
         
         window.open(`https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`, '_blank');
@@ -480,6 +480,7 @@
 </body>
 
 </html>
+
 
 
 
