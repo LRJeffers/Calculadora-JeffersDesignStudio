@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cotizador | Jeffers Design Studio</title>
+    <title id="doc-title">Cotizador | Jeffers Design Studio</title>
     <link rel="icon" href="logo.jpg">
     
     <!-- Google Fonts: Oswald & Montserrat -->
@@ -73,15 +73,91 @@
             box-shadow: 0 0 12px var(--accent);
         }
 
+        /* BARRA SUPERIOR DE IDIOMA Y SONIDO */
+        .top-bar-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .lang-sound-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #111111;
+            border: 1px solid #2a2a2a;
+            padding: 4px 10px;
+            border-radius: 20px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: #888888;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Oswald', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .lang-btn:hover {
+            color: #ffffff;
+            border-color: #444444;
+        }
+
+        .lang-btn.active {
+            background: var(--accent);
+            color: #ffffff;
+            border-color: var(--accent-glow);
+            box-shadow: 0 0 8px rgba(230, 57, 70, 0.5);
+        }
+
+        .ctrl-divider {
+            color: #333333;
+            font-size: 0.8rem;
+            user-select: none;
+        }
+
+        .sound-btn {
+            background: transparent;
+            border: none;
+            color: #888888;
+            font-size: 0.9rem;
+            padding: 3px 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sound-btn:hover {
+            color: #ffffff;
+            transform: scale(1.15);
+        }
+
+        .sound-btn.muted {
+            opacity: 0.45;
+            filter: grayscale(1);
+        }
+
         /* LOGO Y ENCABEZADO */
         .logo-container {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 14px;
         }
         
         .logo-img {
-            max-width: 180px;
-            max-height: 95px;
+            max-width: 170px;
+            max-height: 90px;
             height: auto;
             filter: drop-shadow(0 0 10px rgba(178, 34, 34, 0.4));
             border-radius: 4px;
@@ -108,7 +184,7 @@
             text-align: center;
             font-size: 0.85rem;
             color: var(--text-muted);
-            margin-bottom: 25px;
+            margin-bottom: 22px;
             letter-spacing: 0.5px;
         }
 
@@ -348,7 +424,7 @@
 
         @media (max-width: 480px) {
             body { padding: 15px 10px; }
-            .container { padding: 25px 18px; border-radius: 10px; }
+            .container { padding: 22px 16px; border-radius: 10px; }
             h2 { font-size: 1.45rem; }
             .total { font-size: 1.85rem; }
             button.btn-whatsapp { font-size: 1rem; padding: 14px; }
@@ -358,62 +434,74 @@
 <body>
 
 <div class="container">
+    <!-- BARRA DE IDIOMA Y SONIDO -->
+    <div class="top-bar-controls">
+        <div class="lang-sound-pill">
+            <button type="button" class="lang-btn active" data-lang="es" onclick="cambiarIdioma('es')">ES</button>
+            <button type="button" class="lang-btn" data-lang="en" onclick="cambiarIdioma('en')">EN</button>
+            <button type="button" class="lang-btn" data-lang="pt" onclick="cambiarIdioma('pt')">PT</button>
+            <span class="ctrl-divider">|</span>
+            <button type="button" class="sound-btn" id="sound-toggle-btn" onclick="toggleSonido()" aria-label="Control de sonido" title="Activar/Silenciar sonido">🔊</button>
+        </div>
+    </div>
+
+    <!-- LOGO Y TÍTULO -->
     <div class="logo-container">
         <img src="logo.jpg" alt="Jeffers Design Studio" class="logo-img">
     </div>
 
     <h2>Jeffers <span>Design</span></h2>
-    <div class="subtitle">Diseño de portadas &amp; maquetación editorial para autores independientes</div>
+    <div class="subtitle" data-i18n="subtitle">Diseño de portadas &amp; maquetación editorial para autores independientes</div>
 
     <!-- 1. MÉTODO DE PAGO -->
-    <label for="metodo-pago">Método de Pago:</label>
+    <label for="metodo-pago" data-i18n="label_metodo_pago">Método de Pago:</label>
     <select id="metodo-pago" onchange="sonidoClick(); toggleMetodoPago()">
-        <option value="nacional">Nacional (Bolívares / Pago Móvil)</option>
-        <option value="internacional">Internacional (Binance / Airtm / PayPal)</option>
+        <option value="nacional" data-i18n="opt_pago_nac">Nacional (Bolívares / Pago Móvil)</option>
+        <option value="internacional" data-i18n="opt_pago_int">Internacional (Binance / Airtm / PayPal)</option>
     </select>
 
     <!-- INFO INTERNACIONAL -->
-    <div id="info-internacional" class="info-pill hidden">
+    <div id="info-internacional" class="info-pill hidden" data-i18n="info_int">
         💳 <strong>Métodos Internacionales:</strong> Binance Pay (USDT), Airtm (saldo directo o transferencia a cuenta virtual en USD / ACH en EE. UU.) y PayPal.
     </div>
 
     <!-- TASA BCV NACIONAL -->
     <div id="bloque-tasa">
-        <label for="tasa">Tasa Oficial Euro (BCV):</label>
+        <label for="tasa" data-i18n="label_tasa">Tasa Oficial Euro (BCV):</label>
         <div style="position: relative;">
             <input type="number" id="tasa" placeholder="Consultando tasa..." oninput="calcular()" step="0.01">
             <div id="api-msg" class="api-status">
                 <span id="status-dot" class="dot"></span> 
-                <span id="status-text">Conectando con BCV...</span>
+                <span id="status-text" data-i18n="status_connecting">Conectando con BCV...</span>
             </div>
         </div>
     </div>
 
     <!-- 2. SERVICIO PRINCIPAL -->
-    <label for="servicio">Servicio Solicitado:</label>
+    <label for="servicio" data-i18n="label_servicio">Servicio Solicitado:</label>
     <select id="servicio" onchange="sonidoClick(); mostrarOpciones()">
-        <option value="none">-- Selecciona un servicio --</option>
-        <option value="portada">🎨 Diseño de Portada</option>
-        <option value="maquetacion">📖 Maquetación Editorial</option>
-        <option value="combo">🔥 Combo Completo (Portada + Maquetación) [10% OFF]</option>
+        <option value="none" data-i18n="opt_serv_default">-- Selecciona un servicio --</option>
+        <option value="portada" data-i18n="opt_serv_portada">🎨 Diseño de Portada</option>
+        <option value="maquetacion" data-i18n="opt_serv_maq">📖 Maquetación Editorial</option>
+        <option value="combo" data-i18n="opt_serv_combo">🔥 Combo Completo (Portada + Maquetación) [10% OFF]</option>
     </select>
 
     <!-- BLOQUE PORTADA -->
     <div id="opciones-portada" class="hidden">
-        <label for="tipo-portada">Tipo de Portada:</label>
+        <label for="tipo-portada" data-i18n="label_tipo_portada">Tipo de Portada:</label>
         <select id="tipo-portada" onchange="sonidoClick(); calcular()">
-            <option value="0" disabled selected>-- SELECCIONA TIPO DE DISEÑO --</option>
+            <option value="0" disabled selected data-i18n="opt_portada_default">-- SELECCIONA TIPO DE DISEÑO --</option>
             
-            <optgroup label="PREMADES (Diseños Listos)">
-                <option value="15">Ebook Premade - 15 USD/EUR</option>
-                <option value="30">Cubierta Completa Premade - 30 USD/EUR</option>
+            <optgroup id="grp-premades" label="PREMADES (Diseños Listos)">
+                <option value="15" data-i18n="opt_prem_ebook">Ebook Premade - 15 USD/EUR</option>
+                <option value="30" data-i18n="opt_prem_full">Cubierta Completa Premade - 30 USD/EUR</option>
             </optgroup>
 
-            <optgroup label="PERSONALIZADO (Desde Cero)">
-                <option value="45">Ebook Personalizado (Básico/Tipográfico) - 45 USD/EUR</option>
-                <option value="65">Ebook Ilustrado / Fotomanipulación Completa - 65 USD/EUR</option>
-                <option value="75">Cubierta Completa Personalizada (Básica) - 75 USD/EUR</option>
-                <option value="95">Cubierta Completa Ilustrada / Fotomanipulación - 95 USD/EUR</option>
+            <optgroup id="grp-custom" label="PERSONALIZADO (Desde Cero)">
+                <option value="45" data-i18n="opt_cust_ebook_base">Ebook Personalizado (Básico/Tipográfico) - 45 USD/EUR</option>
+                <option value="65" data-i18n="opt_cust_ebook_art">Ebook Ilustrado / Fotomanipulación Completa - 65 USD/EUR</option>
+                <option value="75" data-i18n="opt_cust_full_base">Cubierta Completa Personalizada (Básica) - 75 USD/EUR</option>
+                <option value="95" data-i18n="opt_cust_full_art">Cubierta Completa Ilustrada / Fotomanipulación - 95 USD/EUR</option>
             </optgroup>
         </select>
 
@@ -421,32 +509,32 @@
         <div class="checkbox-group" onclick="toggleCheckbox('check-pack-promo')">
             <input type="checkbox" id="check-pack-promo" onchange="sonidoClick(); calcular()" onclick="event.stopPropagation()">
             <label for="check-pack-promo">
-                ✨ <strong>Pack Promocional</strong> (+Mockup 3D + 2 Banners para redes) <span class="badge-discount">+20 USD/EUR</span>
+                <span data-i18n="label_pack_promo">✨ <strong>Pack Promocional</strong> (+Mockup 3D + 2 Banners para redes)</span> <span class="badge-discount">+20 USD/EUR</span>
             </label>
         </div>
 
-        <label for="cambios-extra">Cambios adicionales complejos (opcional):</label>
+        <label for="cambios-extra" data-i18n="label_cambios_extra">Cambios adicionales complejos (opcional):</label>
         <input type="number" id="cambios-extra" value="0" min="0" placeholder="0" oninput="calcular()">
-        <div class="note">Cada cambio adicional tras aprobación: +3 USD/EUR</div>
+        <div class="note" data-i18n="note_cambios_extra">Cada cambio adicional tras aprobación: +3 USD/EUR</div>
     </div>
 
     <!-- BLOQUE MAQUETACIÓN -->
     <div id="opciones-maquetacion" class="hidden">
-        <label for="tipo-maquetacion">Estilo de Maquetación:</label>
+        <label for="tipo-maquetacion" data-i18n="label_tipo_maq">Estilo de Maquetación:</label>
         <select id="tipo-maquetacion" onchange="sonidoClick(); toggleMedida()">
-            <option value="simple">Novela (Texto Fluido) - 0.50 / 1.000 palabras</option>
-            <option value="decorado">Novela (Decorada con capitulares y ornamentos) - 0.75 / 1.000 palabras</option>
-            <option value="agenda">Agenda / Diario / Cuaderno (Visual) - 1.00 / página</option>
+            <option value="simple" data-i18n="opt_maq_simple">Novela (Texto Fluido) - 0.50 / 1.000 palabras</option>
+            <option value="decorado" data-i18n="opt_maq_decorada">Novela (Decorada con capitulares y ornamentos) - 0.75 / 1.000 palabras</option>
+            <option value="agenda" data-i18n="opt_maq_agenda">Agenda / Diario / Cuaderno (Visual) - 1.00 / página</option>
         </select>
 
         <div id="input-palabras">
-            <label for="cantidad-palabras">Nº de Palabras (Aprox):</label>
+            <label for="cantidad-palabras" data-i18n="label_palabras">Nº de Palabras (Aprox):</label>
             <input type="number" id="cantidad-palabras" placeholder="Ej: 50000" oninput="calcular()">
-            <div class="note">Tarifa mínima por novela: 10 USD/EUR</div>
+            <div class="note" data-i18n="note_palabras">Tarifa mínima por novela: 10 USD/EUR</div>
         </div>
 
         <div id="input-paginas" class="hidden">
-            <label for="cantidad-paginas">Nº de Páginas (Aprox):</label>
+            <label for="cantidad-paginas" data-i18n="label_paginas">Nº de Páginas (Aprox):</label>
             <input type="number" id="cantidad-paginas" placeholder="Ej: 100" oninput="calcular()">
         </div>
     </div>
@@ -458,7 +546,7 @@
         </ul>
 
         <div class="total-wrapper">
-            <span class="total-label">Total Estimado:</span>
+            <span class="total-label" data-i18n="label_total">Total Estimado:</span>
             <div>
                 <span id="total-ref" class="total">0.00</span>
                 <span class="total-currency">USD/EUR</span>
@@ -466,17 +554,192 @@
         </div>
 
         <div id="bloque-bs" class="bs-total">
-            <span>En Bolívares:</span>
+            <span data-i18n="label_bs">En Bolívares:</span>
             <span id="total-bs">Bs. 0,00</span>
         </div>
     </div>
 
     <button type="button" class="btn-whatsapp" onclick="sonidoExito(); enviarWhatsapp()">
-        <span>Solicitar Cotización</span> ➜
+        <span data-i18n="btn_solicitar">Solicitar Cotización ➜</span>
     </button>
 </div>
 
 <script>
+    // --- 🌍 SISTEMA DE IDIOMAS (I18N) ---
+    const I18N = {
+        es: {
+            page_title: "Cotizador | Jeffers Design Studio",
+            subtitle: "Diseño de portadas & maquetación editorial para autores independientes",
+            label_metodo_pago: "Método de Pago:",
+            opt_pago_nac: "Nacional (Bolívares / Pago Móvil)",
+            opt_pago_int: "Internacional (Binance / Airtm / PayPal)",
+            info_int: "💳 <strong>Métodos Internacionales:</strong> Binance Pay (USDT), Airtm (saldo directo o transferencia a cuenta virtual en USD / ACH en EE. UU.) y PayPal.",
+            label_tasa: "Tasa Oficial Euro (BCV):",
+            status_connecting: "Conectando con BCV...",
+            status_live: "Tasa BCV (Euro) en Vivo",
+            status_manual: "Ingresa la tasa BCV manualmente.",
+            label_servicio: "Servicio Solicitado:",
+            opt_serv_default: "-- Selecciona un servicio --",
+            opt_serv_portada: "🎨 Diseño de Portada",
+            opt_serv_maq: "📖 Maquetación Editorial",
+            opt_serv_combo: "🔥 Combo Completo (Portada + Maquetación) [10% OFF]",
+            label_tipo_portada: "Tipo de Portada:",
+            opt_portada_default: "-- SELECCIONA TIPO DE DISEÑO --",
+            group_premades: "PREMADES (Diseños Listos)",
+            opt_prem_ebook: "Ebook Premade - 15 USD/EUR",
+            opt_prem_full: "Cubierta Completa Premade - 30 USD/EUR",
+            group_custom: "PERSONALIZADO (Desde Cero)",
+            opt_cust_ebook_base: "Ebook Personalizado (Básico/Tipográfico) - 45 USD/EUR",
+            opt_cust_ebook_art: "Ebook Ilustrado / Fotomanipulación Completa - 65 USD/EUR",
+            opt_cust_full_base: "Cubierta Completa Personalizada (Básica) - 75 USD/EUR",
+            opt_cust_full_art: "Cubierta Completa Ilustrada / Fotomanipulación - 95 USD/EUR",
+            label_pack_promo: "✨ <strong>Pack Promocional</strong> (+Mockup 3D + 2 Banners para redes)",
+            label_cambios_extra: "Cambios adicionales complejos (opcional):",
+            note_cambios_extra: "Cada cambio adicional tras aprobación: +3 USD/EUR",
+            label_tipo_maq: "Estilo de Maquetación:",
+            opt_maq_simple: "Novela (Texto Fluido) - 0.50 / 1.000 palabras",
+            opt_maq_decorada: "Novela (Decorada con capitulares y ornamentos) - 0.75 / 1.000 palabras",
+            opt_maq_agenda: "Agenda / Diario / Cuaderno (Visual) - 1.00 / página",
+            label_palabras: "Nº de Palabras (Aprox):",
+            ph_palabras: "Ej: 50000",
+            note_palabras: "Tarifa mínima por novela: 10 USD/EUR",
+            label_paginas: "Nº de Páginas (Aprox):",
+            ph_paginas: "Ej: 100",
+            label_total: "Total Estimado:",
+            label_bs: "En Bolívares:",
+            btn_solicitar: "Solicitar Cotización ➜",
+            item_pack_promo: "Pack Promo (+Mockup 3D + Banners)",
+            item_extra_changes: "cambio(s) adicional(es)",
+            item_maq_agenda: "Maquetación Agenda",
+            item_maq_simple: "Maquetación Fluida",
+            item_maq_decorada: "Maquetación Decorada",
+            item_min_applied: "[Mínimo aplicado]",
+            item_discount_combo: "Descuento Combo Especial (10%)",
+            alert_select_service: "Por favor selecciona un servicio para cotizar.",
+            wa_greeting: "¡Hola Jeffers Design Studio! 👋\n\nDeseo solicitar la siguiente cotización:\n\n",
+            wa_service_label: "📌 *Servicio:* ",
+            wa_budget_label: "💰 *Presupuesto Estimado:* ",
+            wa_nac_method: "\n💵 *Método de Pago:* Nacional (Pago Móvil / Tasa BCV: ",
+            wa_int_method: "\n🌍 *Método de Pago:* Internacional (Binance / Airtm [saldo o cuenta virtual USD] / PayPal)\n\n",
+            wa_footer: "¿Podríamos coordinar los detalles del proyecto? ¡Muchas gracias!"
+        },
+        en: {
+            page_title: "Quote Calculator | Jeffers Design Studio",
+            subtitle: "Book cover design & interior formatting for indie authors",
+            label_metodo_pago: "Payment Method:",
+            opt_pago_nac: "Venezuela (Bolívares / Mobile Payment)",
+            opt_pago_int: "International (Binance / Airtm / PayPal)",
+            info_int: "💳 <strong>International Methods:</strong> Binance Pay (USDT), Airtm (direct balance or virtual USD / ACH bank transfer in the US), and PayPal.",
+            label_tasa: "Official BCV Rate (EUR/USD):",
+            status_connecting: "Connecting to BCV...",
+            status_live: "BCV Official Rate Live",
+            status_manual: "Enter BCV rate manually.",
+            label_servicio: "Requested Service:",
+            opt_serv_default: "-- Select a service --",
+            opt_serv_portada: "🎨 Book Cover Design",
+            opt_serv_maq: "📖 Interior Book Formatting",
+            opt_serv_combo: "🔥 Full Combo (Cover + Formatting) [10% OFF]",
+            label_tipo_portada: "Cover Design Type:",
+            opt_portada_default: "-- SELECT DESIGN TYPE --",
+            group_premades: "PREMADES (Ready-Made Designs)",
+            opt_prem_ebook: "Premade Ebook Cover - 15 USD/EUR",
+            opt_prem_full: "Premade Full Wrap Cover - 30 USD/EUR",
+            group_custom: "CUSTOM DESIGN (From Scratch)",
+            opt_cust_ebook_base: "Custom Ebook (Basic / Typography) - 45 USD/EUR",
+            opt_cust_ebook_art: "Custom Ebook (Illustrated / Photomanipulation) - 65 USD/EUR",
+            opt_cust_full_base: "Custom Full Wrap (Basic) - 75 USD/EUR",
+            opt_cust_full_art: "Custom Full Wrap (Illustrated / Photomanipulation) - 95 USD/EUR",
+            label_pack_promo: "✨ <strong>Promotional Pack</strong> (+3D Mockup + 2 Social Media Banners)",
+            label_cambios_extra: "Extra complex revisions (optional):",
+            note_cambios_extra: "Each extra revision after approval: +3 USD/EUR",
+            label_tipo_maq: "Formatting Style:",
+            opt_maq_simple: "Novel (Reflowable Text) - 0.50 / 1,000 words",
+            opt_maq_decorada: "Novel (Decorated with drop caps & ornaments) - 0.75 / 1,000 words",
+            opt_maq_agenda: "Journal / Planner / Notebook (Visual) - 1.00 / page",
+            label_palabras: "Word Count (Approx):",
+            ph_palabras: "Ex: 50000",
+            note_palabras: "Minimum fee per novel: 10 USD/EUR",
+            label_paginas: "Page Count (Approx):",
+            ph_paginas: "Ex: 100",
+            label_total: "Estimated Total:",
+            label_bs: "In Bolívares:",
+            btn_solicitar: "Request Quote ➜",
+            item_pack_promo: "Promo Pack (+3D Mockup + Banners)",
+            item_extra_changes: "extra revision(s)",
+            item_maq_agenda: "Visual Planner Formatting",
+            item_maq_simple: "Standard Novel Formatting",
+            item_maq_decorada: "Decorated Novel Formatting",
+            item_min_applied: "[Minimum applied]",
+            item_discount_combo: "Special Combo Discount (10%)",
+            alert_select_service: "Please select a service to calculate your quote.",
+            wa_greeting: "Hello Jeffers Design Studio! 👋\n\nI would like to request the following quotation:\n\n",
+            wa_service_label: "📌 *Service:* ",
+            wa_budget_label: "💰 *Estimated Budget:* ",
+            wa_nac_method: "\n💵 *Payment Method:* Venezuelan Bolívares (BCV Rate: ",
+            wa_int_method: "\n🌍 *Payment Method:* International (Binance / Airtm [balance or virtual USD account] / PayPal)\n\n",
+            wa_footer: "Could we coordinate the project details? Thank you so much!"
+        },
+        pt: {
+            page_title: "Calculadora de Orçamento | Jeffers Design Studio",
+            subtitle: "Design de capas & diagramação editorial para autores independentes",
+            label_metodo_pago: "Método de Pagamento:",
+            opt_pago_nac: "Nacional (Venezuela / Bolívares)",
+            opt_pago_int: "Internacional (Binance / Airtm / PayPal)",
+            info_int: "💳 <strong>Métodos Internacionais:</strong> Binance Pay (USDT), Airtm (saldo direto ou transferência para conta virtual em USD / ACH nos EUA) e PayPal.",
+            label_tasa: "Taxa Oficial Euro (BCV):",
+            status_connecting: "Conectando ao BCV...",
+            status_live: "Taxa BCV Oficial em Tempo Real",
+            status_manual: "Insira a taxa manualmente.",
+            label_servicio: "Serviço Solicitado:",
+            opt_serv_default: "-- Selecione um serviço --",
+            opt_serv_portada: "🎨 Design de Capa",
+            opt_serv_maq: "📖 Diagramação Editorial",
+            opt_serv_combo: "🔥 Combo Completo (Capa + Diagramação) [10% OFF]",
+            label_tipo_portada: "Tipo de Capa:",
+            opt_portada_default: "-- SELECIONE O TIPO DE DESIGN --",
+            group_premades: "PREMADES (Designs Prontos)",
+            opt_prem_ebook: "Ebook Premade - 15 USD/EUR",
+            opt_prem_full: "Capa Completa Premade - 30 USD/EUR",
+            group_custom: "PERSONALIZADO (Do Zero)",
+            opt_cust_ebook_base: "Ebook Personalizado (Básico / Tipográfico) - 45 USD/EUR",
+            opt_cust_ebook_art: "Ebook Ilustrado / Fotomanipulação Completa - 65 USD/EUR",
+            opt_cust_full_base: "Capa Completa Personalizada (Básica) - 75 USD/EUR",
+            opt_cust_full_art: "Capa Completa Ilustrada / Fotomanipulação - 95 USD/EUR",
+            label_pack_promo: "✨ <strong>Pack Promocional</strong> (+Mockup 3D + 2 Banners para redes)",
+            label_cambios_extra: "Alterações adicionais complexas (opcional):",
+            note_cambios_extra: "Cada alteração adicional após aprovação: +3 USD/EUR",
+            label_tipo_maq: "Estilo de Diagramação:",
+            opt_maq_simple: "Romance (Texto Fluido) - 0.50 / 1.000 palavras",
+            opt_maq_decorada: "Romance (Decorado com capitulares e ornamentos) - 0.75 / 1.000 palavras",
+            opt_maq_agenda: "Agenda / Planner / Caderno (Visual) - 1.00 / página",
+            label_palabras: "Nº de Palavras (Aprox):",
+            ph_palabras: "Ex: 50000",
+            note_palabras: "Valor mínimo por livro: 10 USD/EUR",
+            label_paginas: "Nº de Páginas (Aprox):",
+            ph_paginas: "Ex: 100",
+            label_total: "Total Estimado:",
+            label_bs: "Em Bolívares:",
+            btn_solicitar: "Solicitar Orçamento ➜",
+            item_pack_promo: "Pack Promocional (+Mockup 3D + Banners)",
+            item_extra_changes: "alteração(ões) adicional(is)",
+            item_maq_agenda: "Diagramação de Agenda/Planner",
+            item_maq_simple: "Diagramação Fluida",
+            item_maq_decorada: "Diagramação Decorada",
+            item_min_applied: "[Mínimo aplicado]",
+            item_discount_combo: "Desconto Combo Especial (10%)",
+            alert_select_service: "Por favor selecione um serviço para orçar.",
+            wa_greeting: "Olá Jeffers Design Studio! 👋\n\nGostaria de solicitar o seguinte orçamento:\n\n",
+            wa_service_label: "📌 *Serviço:* ",
+            wa_budget_label: "💰 *Orçamento Estimado:* ",
+            wa_nac_method: "\n💵 *Método de Pagamento:* Nacional (Bolívares / Taxa BCV: ",
+            wa_int_method: "\n🌍 *Método de Pagamento:* Internacional (Binance / Airtm [saldo ou conta virtual USD] / PayPal)\n\n",
+            wa_footer: "Poderíamos coordenar os detalhes do projeto? Muito obrigado!"
+        }
+    };
+
+    let idiomaActual = localStorage.getItem('jds_calc_lang') || 'es';
+    let soundEnabled = localStorage.getItem('jds_calc_sound') !== 'false';
+
     // --- 🎵 SONIDOS PRECARGADOS ---
     const audioClick = new Audio("click.mp3");
     const audioSuccess = new Audio("exito.mp3");
@@ -484,13 +747,69 @@
     audioSuccess.volume = 0.55;
 
     function sonidoClick() {
+        if (!soundEnabled) return;
         audioClick.currentTime = 0;
         audioClick.play().catch(() => {});
     }
 
     function sonidoExito() {
+        if (!soundEnabled) return;
         audioSuccess.currentTime = 0;
         audioSuccess.play().catch(() => {});
+    }
+
+    function toggleSonido() {
+        soundEnabled = !soundEnabled;
+        localStorage.setItem('jds_calc_sound', soundEnabled ? 'true' : 'false');
+        actualizarBotonSonido();
+        if (soundEnabled) sonidoClick();
+    }
+
+    function actualizarBotonSonido() {
+        const btn = document.getElementById('sound-toggle-btn');
+        if (btn) {
+            btn.textContent = soundEnabled ? '🔊' : '🔇';
+            btn.classList.toggle('muted', !soundEnabled);
+        }
+    }
+
+    function cambiarIdioma(lang) {
+        idiomaActual = lang || 'es';
+        const dict = I18N[idiomaActual] || I18N.es;
+        localStorage.setItem('jds_calc_lang', idiomaActual);
+
+        // Actualizar botones activos
+        document.querySelectorAll('.lang-btn').forEach(b => {
+            b.classList.toggle('active', b.getAttribute('data-lang') === idiomaActual);
+        });
+
+        // Actualizar textos con data-i18n
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (dict[key]) {
+                el.innerHTML = dict[key];
+            }
+        });
+
+        // Actualizar optgroups
+        const grpPremades = document.getElementById('grp-premades');
+        if (grpPremades && dict.group_premades) grpPremades.label = dict.group_premades;
+        const grpCustom = document.getElementById('grp-custom');
+        if (grpCustom && dict.group_custom) grpCustom.label = dict.group_custom;
+
+        // Actualizar placeholders
+        const inputPalabras = document.getElementById('cantidad-palabras');
+        if (inputPalabras && dict.ph_palabras) inputPalabras.placeholder = dict.ph_palabras;
+        const inputPaginas = document.getElementById('cantidad-paginas');
+        if (inputPaginas && dict.ph_paginas) inputPaginas.placeholder = dict.ph_paginas;
+
+        // Título del documento
+        if (dict.page_title) {
+            document.title = dict.page_title;
+        }
+
+        sonidoClick();
+        calcular();
     }
 
     // --- CONSTANTES DE PRECIO ---
@@ -501,6 +820,10 @@
     const PRECIO_MAQ_VISUAL = 1.00; 
 
     window.onload = function() {
+        actualizarBotonSonido();
+        if (idiomaActual !== 'es') {
+            cambiarIdioma(idiomaActual);
+        }
         toggleMetodoPago(); 
         cargarTasa();       
     };
@@ -513,6 +836,7 @@
     }
 
     function cargarTasa() {
+        const dict = I18N[idiomaActual] || I18N.es;
         // INTENTO 1: DolarApi oficial
         fetch('https://ve.dolarapi.com/v1/euros/oficial')
             .then(res => res.json())
@@ -530,16 +854,17 @@
                     })
                     .catch(() => {
                         document.getElementById('status-dot').className = 'dot error';
-                        document.getElementById('status-text').innerText = "Ingresa la tasa BCV manualmente.";
+                        document.getElementById('status-text').innerText = dict.status_manual;
                         document.getElementById('tasa').placeholder = "0.00";
                     });
             });
     }
 
     function actualizarTasa(precio) {
+        const dict = I18N[idiomaActual] || I18N.es;
         document.getElementById('tasa').value = precio;
         document.getElementById('status-dot').className = 'dot active';
-        document.getElementById('status-text').innerText = "Tasa BCV (Euro) en Vivo";
+        document.getElementById('status-text').innerText = dict.status_live;
         document.getElementById('status-text').style.color = "#00ff88";
         calcular(); 
     }
@@ -594,6 +919,7 @@
     }
 
     function calcular() {
+        const dict = I18N[idiomaActual] || I18N.es;
         const servicio = document.getElementById("servicio").value;
         let total = 0;
         let itemsBreakdown = [];
@@ -613,7 +939,7 @@
             const packPromo = document.getElementById("check-pack-promo").checked;
             if (packPromo) {
                 total += PRECIO_PACK_PROMO;
-                itemsBreakdown.push({ label: "Pack Promo (+Mockup 3D + Banners)", cost: PRECIO_PACK_PROMO });
+                itemsBreakdown.push({ label: dict.item_pack_promo, cost: PRECIO_PACK_PROMO });
             }
 
             // Extras
@@ -621,7 +947,7 @@
             if (extras > 0) {
                 const costoExtras = extras * PRECIO_CAMBIO_EXTRA;
                 total += costoExtras;
-                itemsBreakdown.push({ label: `${extras} cambio(s) adicional(es)`, cost: costoExtras });
+                itemsBreakdown.push({ label: `${extras} ${dict.item_extra_changes}`, cost: costoExtras });
             }
         } 
 
@@ -634,18 +960,18 @@
             if (tipo === "agenda") {
                 const paginas = parseInt(document.getElementById("cantidad-paginas").value) || 0;
                 subtotalMaq = paginas * PRECIO_MAQ_VISUAL;
-                descMaq = `Maquetación Agenda (${paginas} págs)`;
+                descMaq = `${dict.item_maq_agenda} (${paginas} págs)`;
             } else {
                 const palabras = parseInt(document.getElementById("cantidad-palabras").value) || 0;
                 const tasaPalabras = (tipo === "simple") ? PRECIO_MAQ_SIMPLE : PRECIO_MAQ_DECORADA;
                 subtotalMaq = (palabras / 1000) * tasaPalabras;
-                const tipoNombre = (tipo === "simple") ? "Fluida" : "Decorada";
-                descMaq = `Maquetación ${tipoNombre} (${palabras.toLocaleString()} palabras)`;
+                const tipoNombre = (tipo === "simple") ? dict.item_maq_simple : dict.item_maq_decorada;
+                descMaq = `${tipoNombre} (${palabras.toLocaleString()} palabras)`;
             }
 
             if (subtotalMaq > 0 && subtotalMaq < 10) {
                 subtotalMaq = 10;
-                descMaq += " [Mínimo aplicado]";
+                descMaq += ` ${dict.item_min_applied}`;
             }
 
             if (subtotalMaq > 0) {
@@ -658,7 +984,7 @@
         if (servicio === "combo" && total > 0) {
             const descuento = total * 0.10;
             total -= descuento;
-            itemsBreakdown.push({ label: "Descuento Combo Especial (10%)", cost: -descuento, isDiscount: true });
+            itemsBreakdown.push({ label: dict.item_discount_combo, cost: -descuento, isDiscount: true });
         }
 
         // Render Desglose
@@ -690,6 +1016,7 @@
     }
 
     function enviarWhatsapp() {
+        const dict = I18N[idiomaActual] || I18N.es;
         const servicio = document.getElementById("servicio").value;
         const total = document.getElementById("total-ref").innerText;
         const totalBs = document.getElementById("total-bs").innerText;
@@ -698,7 +1025,7 @@
         const telefono = "584125796738"; 
 
         if (servicio === "none") {
-            alert("Por favor selecciona un servicio para cotizar.");
+            alert(dict.alert_select_service);
             return;
         }
 
@@ -706,10 +1033,10 @@
         if (servicio === "portada") {
             const selPort = document.getElementById("tipo-portada");
             const portText = selPort.selectedIndex > 0 ? selPort.options[selPort.selectedIndex].text : "No especificada";
-            resumenServicio = "Diseño de Portada: " + portText;
-            if (document.getElementById("check-pack-promo").checked) resumenServicio += " + Pack Promo (Mockup 3D + Banners)";
+            resumenServicio = portText;
+            if (document.getElementById("check-pack-promo").checked) resumenServicio += " + " + dict.item_pack_promo;
             const extras = parseInt(document.getElementById("cambios-extra").value) || 0;
-            if (extras > 0) resumenServicio += ` + ${extras} cambio(s) adicional(es)`;
+            if (extras > 0) resumenServicio += ` + ${extras} ${dict.item_extra_changes}`;
         } else if (servicio === "maquetacion") {
             const selMaq = document.getElementById("tipo-maquetacion");
             const tipo = selMaq.value;
@@ -722,7 +1049,7 @@
                 const palabras = parseInt(document.getElementById("cantidad-palabras").value) || 0;
                 detalle = ` (${palabras.toLocaleString()} palabras)`;
             }
-            resumenServicio = "Maquetación Editorial: " + maqText + detalle;
+            resumenServicio = maqText + detalle;
         } else if (servicio === "combo") {
             const selPort = document.getElementById("tipo-portada");
             const portText = selPort.selectedIndex > 0 ? selPort.options[selPort.selectedIndex].text.split(' - ')[0] : "Portada";
@@ -737,32 +1064,21 @@
                 const palabras = parseInt(document.getElementById("cantidad-palabras").value) || 0;
                 detalle = ` (${palabras.toLocaleString()} palabras)`;
             }
-            resumenServicio = `Combo Completo [10% OFF]: ${portText} + ${maqText}${detalle}`;
-            if (document.getElementById("check-pack-promo").checked) resumenServicio += " + Pack Promo";
+            resumenServicio = `Combo [10% OFF]: ${portText} + ${maqText}${detalle}`;
+            if (document.getElementById("check-pack-promo").checked) resumenServicio += " + " + dict.item_pack_promo;
         }
 
-        let mensaje = `¡Hola Jeffers Design Studio! 👋
-
-Deseo solicitar la siguiente cotización:
-
-`;
-        mensaje += `📌 *Servicio:* ${resumenServicio}
-`;
-        mensaje += `💰 *Presupuesto Estimado:* *${total} USD/EUR*`;
+        let mensaje = dict.wa_greeting;
+        mensaje += `${dict.wa_service_label}${resumenServicio}\n`;
+        mensaje += `${dict.wa_budget_label}*${total} USD/EUR*`;
 
         if (metodo === "nacional") {
-            mensaje += ` (${totalBs})
-💵 *Método de Pago:* Nacional (Pago Móvil / Tasa BCV: ${tasa})
-
-`;
+            mensaje += ` (${totalBs})${dict.wa_nac_method}${tasa})\n\n`;
         } else {
-            mensaje += `
-🌍 *Método de Pago:* Internacional (Binance / Airtm [saldo o cuenta virtual USD] / PayPal)
-
-`;
+            mensaje += dict.wa_int_method;
         }
 
-        mensaje += `¿Podríamos coordinar los detalles del proyecto? ¡Muchas gracias!`;
+        mensaje += dict.wa_footer;
         
         window.open(`https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`, '_blank');
     }
